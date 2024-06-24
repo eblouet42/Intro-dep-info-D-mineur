@@ -6,13 +6,13 @@ public class Grille {
     int lignes;
     int colonnes;
     int nbMines;
-    Case[][] Cases;
+    Case[][] cases;
 
     public Grille(int lignes, int colonnes, int nbMines){
         this.lignes = lignes;
         this.colonnes = colonnes;
         this.nbMines = nbMines;
-        Cases = new Case[lignes][colonnes];
+        cases = new Case[lignes][colonnes];
         initialisation();
 
     }
@@ -20,7 +20,7 @@ public class Grille {
     private void initialisation() {
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
-                Cases[i][j] = new Case();
+                cases[i][j] = new Case();
 
             }
         }
@@ -43,7 +43,7 @@ public class Grille {
                         }
                     }
                 }
-                Cases[i][j].setMinesVoisines(compteur);
+                cases[i][j].setMinesVoisines(compteur);
 
             }
         }
@@ -55,16 +55,16 @@ public class Grille {
         while (minesPlacées<nbMines){
             int ligne = random.nextInt(lignes);
             int colonne = random.nextInt(colonnes);
-            if (!Cases[ligne][colonne].hasMine) {
-                Cases[ligne][colonne].setMine(true);
+            if (!cases[ligne][colonne].hasMine) {
+                cases[ligne][colonne].setMine(true);
                 minesPlacées++;
             }
         }
     }
 
     public void click(int x, int y) {
-        Cases[x][y].click();
-        if (Cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
+        cases[x][y].click();
+        if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
             for (int dx=-1; dx<2; dx++){
                 for (int dy=-1; dy<2; dy++){
                     if (estDansLaGrille(x+dx,y+dy)) {
