@@ -6,7 +6,7 @@ import java.util.Vector;
 public class Grille {
     int lignes;
     int colonnes;
-    int nbMines
+    int nbMines;
     Case[][] Cases;
 
     public Grille(int lignes, int colonnes, int nbMines){
@@ -39,7 +39,7 @@ public class Grille {
                 int compteur = 0;
                 for (int di=-1; di<2; di++){
                     for (int dj=-1; dj<2; dj++){
-                        if estDansLaGrille(i+di,j+dj) {
+                        if (estDansLaGrille(i+di,j+dj)) {
                             compteur++;
                         }
                     }
