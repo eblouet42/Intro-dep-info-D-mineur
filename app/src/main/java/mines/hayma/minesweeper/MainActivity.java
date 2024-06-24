@@ -40,22 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnFlag = findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {
-            // Gérer l'action Flag
         });
 
         Button btnDiscover = findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
-            // Gérer l'action Discover
         });
     }
-
     public void updateGrid() {
         mineAdapter.notifyDataSetChanged();
     }
 
     public void gameOver() {
         Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-        // Révéler toutes les mines
         for (Case c : grille.cases) {
             if (c.hasMine) {
                 c.isClicked = true;

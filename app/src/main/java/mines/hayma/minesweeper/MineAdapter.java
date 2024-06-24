@@ -20,17 +20,14 @@ public class MineAdapter extends BaseAdapter {
     public int getCount() {
         return grille.nbCase;
     }
-
     @Override
     public Object getItem(int position) {
         return grille.cases.get(position);
     }
-
     @Override
     public long getItemId(int position) {
         return position;
     }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
