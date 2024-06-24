@@ -18,7 +18,7 @@ public class Case {
         hasMine = bool;
     }
 
-    public void click(boolean caseCliquée){
+    public void click(){
         isClicked = true;
 
     }
