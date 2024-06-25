@@ -74,7 +74,7 @@ public class MineAdapter extends BaseAdapter {
             }
         }
                 // On set l'image du nombre qui correspond si on ne clique pas sur une bombe
-                // Il faut une méthode sur les items pour obtenir le nombre de mines voisines
+                // Il faut une méthode sur les cases pour obtenir le nombre de mines voisines
         else if (c.isMarked)
             {imageView.setImageResource(R.drawable.flag);}
             // On set une image de drapeau
@@ -94,8 +94,12 @@ public class MineAdapter extends BaseAdapter {
         else
             {imageView.setBackgroundColor(colorNormal);}
         // On set le background selon si elle a été sélectionnée ou non.
-        // Par défaut, prend le style avec cell_background et en blanc
-        // Si pressé, prend le style avec cell_highlight et en transparent
+        // Par défaut, prend le style avec cell_background et en transparent
+        // Si pressé, prend le style avec cell_highlight et en blanc
         return imageView;
+    }
+    public void setSelectedPosition(int position){
+        this.selectedPosition=position;
+        notifyDataSetChanged();
     }
 }
