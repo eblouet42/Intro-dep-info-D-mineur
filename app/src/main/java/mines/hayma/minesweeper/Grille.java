@@ -1,12 +1,15 @@
 package mines.hayma.minesweeper;
 
+import android.content.Context;
+import android.widget.ImageView;
+
 import java.util.Random;
 
 public class Grille {
-    private final int lignes;
-    private final int colonnes;
-    private final int nbMines;
-    private final Case[][] cases;
+    private int lignes;
+    private int colonnes;
+    private int nbMines;
+    private Case[][] cases;
 
     public Case[][] getCases() {
         return cases;
@@ -54,36 +57,35 @@ public class Grille {
 
     private void placerMines() {
         Random random = new Random();
-        int minesPlacees = 0;
-        while (minesPlacees<nbMines){
+        int minesPlacées = 0;
+        while (minesPlacées<nbMines){
             int ligne = random.nextInt(lignes);
             int colonne = random.nextInt(colonnes);
             if (!cases[ligne][colonne].hasMine) {
                 cases[ligne][colonne].setMine(true);
-                minesPlacees++;
+                minesPlacées++;
             }
         }
     }
 
     public void click(int x, int y) {
-        if (estDansLaGrille(x, y) && !cases[x][y].isClicked && !cases[x][y].isMarked) {
+        if (!cases[x][y].isMarked) {
             cases[x][y].click();
+
             if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
                 for (int dx = -1; dx < 2; dx++) {
                     for (int dy = -1; dy < 2; dy++) {
                         if (estDansLaGrille(x + dx, y + dy)) {
-                            click(x + dx, y + dy);
+                            if (!cases[x + dx][y + dy].isClicked) {
+                                click(x + dx, y + dy);
+                            }
                         }
                     }
                 }
             }
         }
     }
-    public void drapo(int x, int y) {
-        if (estDansLaGrille(x, y) && !cases[x][y].isDiscoqueen) {
-            cases[x][y].reversedrapo();
-        }
-    }
+
 
     public int getNbCase() {
         return lignes*colonnes;

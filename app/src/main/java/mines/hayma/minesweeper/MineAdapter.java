@@ -1,6 +1,5 @@
 package mines.hayma.minesweeper;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
@@ -12,8 +11,8 @@ import android.widget.ImageView;
 public class MineAdapter extends BaseAdapter {
 
     // Trucs de la doc
-    private final Context context;
-    private final Grille grille;
+    private Context context;
+    private Grille grille;
     private int selectedPosition = -1;
     public MineAdapter(Context context, Grille grille)
         {this.context = context;
@@ -34,7 +33,6 @@ public class MineAdapter extends BaseAdapter {
         {return position;}
     // jsp à quoi ça sert, à rien pr l'instant mais la doc le définit quand même
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     //Explanation
     //int position : la position de l'élément dans la liste ou la grille.
@@ -59,17 +57,50 @@ public class MineAdapter extends BaseAdapter {
         else
             {imageView = (ImageView) convertView;}
 
+        int colorSelected = Color.parseColor("#80FFFFFF");
+        int colorNormal = Color.TRANSPARENT;
+        // Deux couleurs: blanc(pour la selectionnée) et transparant
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, context.getDrawable(R.drawable.cell_highlight));
+        stateListDrawable.addState(new int[] {}, context.getDrawable(R.drawable.cell_background));
+        imageView.setBackground(stateListDrawable);
+
+        imageView.setImageResource(R.drawable.untouched);
+        if (position == selectedPosition){
+            imageView.setBackgroundColor(colorSelected);
+        }
+        else{
+            imageView.setBackgroundColor(colorNormal);
+        }
+
             //Si convertView n'est pas null, cela signifie qu'une vue réutilisable est disponible.
             //imageView = (ImageView) convertView; : la vue réutilisable (qui est supposée être un ImageView) est castée et assignée à la variable imageView.
-
+        /**/
         Case c = (Case) getItem(position);
         // On récupère l'item associé à la position
 
-        if (c.isDiscoqueen) {
-            imageView.setImageResource(c.getImageResource(context));
-        } else {
-            imageView.setImageResource(R.drawable.untouched);
+        if (c.isClicked) {
+            if (c.hasMine){
+                imageView.setImageResource(R.drawable.bomb);
+            }
+                // On set une image de bombe si on clique sur une bombe
+            else {
+                int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
+                imageView.setImageResource(resId);
+            }
         }
+        if (c.isMarked) {
+            imageView.setImageResource(R.drawable.flag);
+        }
+        /*
+                // On set l'image du nombre qui correspond si on ne clique pas sur une bombe
+                // Il faut une méthode sur les cases pour obtenir le nombre de mines voisines
+        else if (c.isMarked)
+            {imageView.setImageResource(R.drawable.flag);}
+            // On set une image de drapeau
+        else
+            {imageView.setImageResource(R.drawable.untouched);}
+            // On set une image de case recouverte
 
         int colorSelected = Color.parseColor("#80FFFFFF");
         int colorNormal = Color.TRANSPARENT;
@@ -85,13 +116,12 @@ public class MineAdapter extends BaseAdapter {
         // On set le background selon si elle a été sélectionnée ou non.
         // Par défaut, prend le style avec cell_background et en transparent
         // Si pressé, prend le style avec cell_highlight et en blanc
+
+         */
         return imageView;
     }
-    public void setSelectedPosition(int position) {
-        Case c = (Case) getItem(position);
-        if (!c.isDiscoqueen) {
-            this.selectedPosition = position;
-            notifyDataSetChanged();
-        }
+    public void setSelectedPosition(int position){
+        this.selectedPosition=position;
+        //notifyDataSetChanged();
     }
 }
