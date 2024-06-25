@@ -17,17 +17,19 @@ public class Case {
         hasMine = bool;
     }
 
-    public void click(){
+    public void click() {
         isClicked = true;
 
     }
 
-    public void setMinesVoisines(int n){
+    public void setMinesVoisines(int n) {
         minesVoisines = n;
     }
+
     public void mark() {
-        isMarked = true;
+        isMarked = !isMarked;
     }
+
     public int getMinesVoisines() {
         return minesVoisines;
     }
