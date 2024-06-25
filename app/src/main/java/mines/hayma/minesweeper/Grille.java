@@ -1,5 +1,8 @@
 package mines.hayma.minesweeper;
 
+import android.content.Context;
+import android.widget.ImageView;
+
 import java.util.Random;
 
 public class Grille {
@@ -66,16 +69,21 @@ public class Grille {
     }
 
     public void click(int x, int y) {
-        cases[x][y].click();
-        /*if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
-            for (int dx=-1; dx<2; dx++){
-                for (int dy=-1; dy<2; dy++){
-                    if (estDansLaGrille(x+dx,y+dy)) {
-                        click(x+dx,y+dy);
+        if (!cases[x][y].isMarked) {
+            cases[x][y].click();
+
+            if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
+                for (int dx = -1; dx < 2; dx++) {
+                    for (int dy = -1; dy < 2; dy++) {
+                        if (estDansLaGrille(x + dx, y + dy)) {
+                            if (!cases[x + dx][y + dy].isClicked) {
+                                click(x + dx, y + dy);
+                            }
+                        }
                     }
                 }
             }
-        }*/
+        }
     }
 
 

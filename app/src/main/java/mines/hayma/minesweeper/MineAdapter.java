@@ -57,9 +57,25 @@ public class MineAdapter extends BaseAdapter {
         else
             {imageView = (ImageView) convertView;}
 
+        int colorSelected = Color.parseColor("#80FFFFFF");
+        int colorNormal = Color.TRANSPARENT;
+        // Deux couleurs: blanc(pour la selectionnée) et transparant
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, context.getDrawable(R.drawable.cell_highlight));
+        stateListDrawable.addState(new int[] {}, context.getDrawable(R.drawable.cell_background));
+        imageView.setBackground(stateListDrawable);
+
+        imageView.setImageResource(R.drawable.untouched);
+        if (position == selectedPosition){
+            imageView.setBackgroundColor(colorSelected);
+        }
+        else{
+            imageView.setBackgroundColor(colorNormal);
+        }
+
             //Si convertView n'est pas null, cela signifie qu'une vue réutilisable est disponible.
             //imageView = (ImageView) convertView; : la vue réutilisable (qui est supposée être un ImageView) est castée et assignée à la variable imageView.
-
+        /**/
         Case c = (Case) getItem(position);
         // On récupère l'item associé à la position
 
@@ -71,9 +87,12 @@ public class MineAdapter extends BaseAdapter {
             else {
                 int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
                 imageView.setImageResource(resId);
-                System.out.println(c.getMinesVoisines());
             }
         }
+        if (c.isMarked) {
+            imageView.setImageResource(R.drawable.flag);
+        }
+        /*
                 // On set l'image du nombre qui correspond si on ne clique pas sur une bombe
                 // Il faut une méthode sur les cases pour obtenir le nombre de mines voisines
         else if (c.isMarked)
@@ -97,10 +116,12 @@ public class MineAdapter extends BaseAdapter {
         // On set le background selon si elle a été sélectionnée ou non.
         // Par défaut, prend le style avec cell_background et en transparent
         // Si pressé, prend le style avec cell_highlight et en blanc
+
+         */
         return imageView;
     }
     public void setSelectedPosition(int position){
         this.selectedPosition=position;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 }
