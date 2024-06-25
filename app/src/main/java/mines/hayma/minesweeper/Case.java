@@ -11,7 +11,6 @@ public class Case {
         isClicked = false;
         isMarked = false;
         minesVoisines = 0;
-
     }
 
     public void setMine(Boolean bool) {

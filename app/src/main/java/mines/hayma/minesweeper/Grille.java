@@ -14,14 +14,12 @@ public class Grille {
         this.nbMines = nbMines;
         cases = new Case[lignes][colonnes];
         initialisation();
-
     }
 
     private void initialisation() {
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
                 cases[i][j] = new Case();
-
             }
         }
         placerMines();
@@ -44,7 +42,6 @@ public class Grille {
                     }
                 }
                 cases[i][j].setMinesVoisines(compteur);
-
             }
         }
     }
