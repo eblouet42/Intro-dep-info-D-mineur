@@ -19,11 +19,14 @@ public class MineAdapter extends BaseAdapter {
         this.grille = grille;}
     @Override
     public int getCount()
-        {return grille.nbCase;}
+        {return grille.getNbCase();}
     //Définir une méthode sur les grilles pour avoir le nb de cases
     @Override
-    public Object getItem(int position)
-        {return grille.cases.get(position);}
+    public Object getItem(int position){
+        int x = position % grille.getLignes();
+        int y = position / grille.getColonnes();
+        return grille.getCases()[x][y];
+    }
     //Définir une méthode sur les cases pour obtenir l'item du gridview à partir de la position x,y
     @Override
     public long getItemId(int position)
@@ -57,16 +60,19 @@ public class MineAdapter extends BaseAdapter {
             //Si convertView n'est pas null, cela signifie qu'une vue réutilisable est disponible.
             //imageView = (ImageView) convertView; : la vue réutilisable (qui est supposée être un ImageView) est castée et assignée à la variable imageView.
 
-        Case c = grille.cases.get(position);
+        Case c = grille.getCases().get(position);
         // On récupère l'item associé à la position
 
-        if (c.isClicked)
-            {if (c.hasMine)
-                {imageView.setImageResource(R.drawable.bomb);}
+        if (c.isClicked) {
+            if (c.hasMine){
+                imageView.setImageResource(R.drawable.bomb);
+            }
                 // On set une image de bombe si on clique sur une bombe
-            else
-                {int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
-                imageView.setImageResource(resId);}}
+            else {
+                int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
+                imageView.setImageResource(resId);
+            }
+        }
                 // On set l'image du nombre qui correspond si on ne clique pas sur une bombe
                 // Il faut une méthode sur les items pour obtenir le nombre de mines voisines
         else if (c.isMarked)

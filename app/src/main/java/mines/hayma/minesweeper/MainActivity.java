@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void gameOver() {
         Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-        for (Case c : grille.cases) {
+        for (Case c : grille.getCases()) {
             if (c.hasMine) {
                 c.isClicked = true;
             }

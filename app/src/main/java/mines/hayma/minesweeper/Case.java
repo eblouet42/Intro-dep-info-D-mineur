@@ -28,4 +28,7 @@ public class Case {
     public void mark() {
         isMarked = true;
     }
+    public int getMinesVoisines() {
+        return minesVoisines;
+    }
 }

@@ -3,10 +3,14 @@ package mines.hayma.minesweeper;
 import java.util.Random;
 
 public class Grille {
-    int lignes;
-    int colonnes;
-    int nbMines;
-    Case[][] cases;
+    private int lignes;
+    private int colonnes;
+    private int nbMines;
+    private Case[][] cases;
+
+    public Case[][] getCases() {
+        return cases;
+    }
 
     public Grille(int lignes, int colonnes, int nbMines){
         this.lignes = lignes;
@@ -73,5 +77,15 @@ public class Grille {
     }
 
 
+    public int getNbCase() {
+        return lignes*colonnes;
+    }
 
+    public int getLignes() {
+        return lignes;
+    }
+
+    public int getColonnes(){
+        return colonnes;
+    }
 }
