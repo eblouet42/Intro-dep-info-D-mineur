@@ -1,5 +1,6 @@
 package mines.hayma.minesweeper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
@@ -11,8 +12,8 @@ import android.widget.ImageView;
 public class MineAdapter extends BaseAdapter {
 
     // Trucs de la doc
-    private Context context;
-    private Grille grille;
+    private final Context context;
+    private final Grille grille;
     private int selectedPosition = -1;
     public MineAdapter(Context context, Grille grille)
         {this.context = context;
@@ -33,6 +34,7 @@ public class MineAdapter extends BaseAdapter {
         {return position;}
     // jsp à quoi ça sert, à rien pr l'instant mais la doc le définit quand même
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     //Explanation
     //int position : la position de l'élément dans la liste ou la grille.

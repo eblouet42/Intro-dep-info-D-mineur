@@ -1,17 +1,13 @@
 package mines.hayma.minesweeper;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Grille grille;
-    private GridView gridView;
     private MineAdapter mineAdapter;
     private int selectedPosition=-1;
 
@@ -25,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         grille = new Grille(gridSize, gridSize, nbMines);
 
         // La gridView en elle-même
-        gridView = findViewById(R.id.gridView);
+        GridView gridView = findViewById(R.id.gridView);
         gridView.setNumColumns(gridSize);
         // L'adapteur qui actualise tous les objets de la gridView
         mineAdapter = new MineAdapter(this, grille);

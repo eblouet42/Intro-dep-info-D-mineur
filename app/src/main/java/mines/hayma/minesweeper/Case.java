@@ -1,5 +1,6 @@
 package mines.hayma.minesweeper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 public class Case {
@@ -23,6 +24,7 @@ public class Case {
 
     public void click(){
         isClicked = true;
+        isDiscoqueen=true;
     }
 
     public void reversedrapo(){
@@ -35,6 +37,7 @@ public class Case {
     public int getMinesVoisines() {
         return minesVoisines;
     }
+    @SuppressLint("DiscouragedApi")
     public int getImageResource(Context context) {
         if (isDiscoqueen) {
             if (hasMine) {

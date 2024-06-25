@@ -3,10 +3,10 @@ package mines.hayma.minesweeper;
 import java.util.Random;
 
 public class Grille {
-    private int lignes;
-    private int colonnes;
-    private int nbMines;
-    private Case[][] cases;
+    private final int lignes;
+    private final int colonnes;
+    private final int nbMines;
+    private final Case[][] cases;
 
     public Case[][] getCases() {
         return cases;
@@ -54,13 +54,13 @@ public class Grille {
 
     private void placerMines() {
         Random random = new Random();
-        int minesPlacées = 0;
-        while (minesPlacées<nbMines){
+        int minesPlacees = 0;
+        while (minesPlacees<nbMines){
             int ligne = random.nextInt(lignes);
             int colonne = random.nextInt(colonnes);
             if (!cases[ligne][colonne].hasMine) {
                 cases[ligne][colonne].setMine(true);
-                minesPlacées++;
+                minesPlacees++;
             }
         }
     }
@@ -79,9 +79,10 @@ public class Grille {
             }
         }
     }
-    public void drapo(int x, int y){
-        if (estDansLaGrille(x,y) && !cases[x][y].isClicked)
-        cases[x][y].reversedrapo();
+    public void drapo(int x, int y) {
+        if (estDansLaGrille(x, y) && !cases[x][y].isDiscoqueen) {
+            cases[x][y].reversedrapo();
+        }
     }
 
     public int getNbCase() {
