@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private Grille grille;
     private GridView gridView;
     private MineAdapter mineAdapter;
-    private Case selectedCase;
+    private int selectedPosition=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,24 +33,33 @@ public class MainActivity extends AppCompatActivity {
 
         // Lorsque l'utilisateur clique sur un élément qui est repéré par sa view, sa position, son id...
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-            int x = position % gridSize;
-            int y = position / gridSize;
-            grille.click(x, y);
+            selectedPosition=position;
             mineAdapter.setSelectedPosition(position);
-            //updateGrid();
             // Actualiser la position pour l'adaptateur
         });
 
         Button btnFlag = findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {
+            if (selectedPosition != -1) {
+                int x=selectedPosition%gridSize;
+                int y=selectedPosition/gridSize;
+                grille.drapo(x,y);
+                updateGrid();
+            }
         });
 
-        Button btnDiscover = findViewById(R.id.btnDiscover);
+        Button btnDiscover = findViewById(R.id.btnDiscoqueen);
         btnDiscover.setOnClickListener(v -> {
+            if (selectedPosition != -1) {
+                int x = selectedPosition % gridSize;
+                int y = selectedPosition / gridSize;
+                grille.click(x, y);
+                updateGrid();
+            }
         });
     }
 
-    /*public void updateGrid() {
+    public void updateGrid() {
         mineAdapter.notifyDataSetChanged();
-    }*/
+    }
 }

@@ -63,25 +63,11 @@ public class MineAdapter extends BaseAdapter {
         Case c = (Case) getItem(position);
         // On récupère l'item associé à la position
 
-        if (c.isClicked) {
-            if (c.hasMine){
-                imageView.setImageResource(R.drawable.bomb);
-            }
-                // On set une image de bombe si on clique sur une bombe
-            else {
-                int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
-                imageView.setImageResource(resId);
-                System.out.println(c.getMinesVoisines());
-            }
+        if (c.isDiscoqueen) {
+            imageView.setImageResource(c.getImageResource(context));
+        } else {
+            imageView.setImageResource(R.drawable.untouched);
         }
-                // On set l'image du nombre qui correspond si on ne clique pas sur une bombe
-                // Il faut une méthode sur les cases pour obtenir le nombre de mines voisines
-        else if (c.isMarked)
-            {imageView.setImageResource(R.drawable.flag);}
-            // On set une image de drapeau
-        else
-            {imageView.setImageResource(R.drawable.untouched);}
-            // On set une image de case recouverte
 
         int colorSelected = Color.parseColor("#80FFFFFF");
         int colorNormal = Color.TRANSPARENT;
@@ -99,8 +85,11 @@ public class MineAdapter extends BaseAdapter {
         // Si pressé, prend le style avec cell_highlight et en blanc
         return imageView;
     }
-    public void setSelectedPosition(int position){
-        this.selectedPosition=position;
-        notifyDataSetChanged();
+    public void setSelectedPosition(int position) {
+        Case c = (Case) getItem(position);
+        if (!c.isDiscoqueen) {
+            this.selectedPosition = position;
+            notifyDataSetChanged();
+        }
     }
 }

@@ -66,18 +66,23 @@ public class Grille {
     }
 
     public void click(int x, int y) {
-        cases[x][y].click();
-        /*if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
-            for (int dx=-1; dx<2; dx++){
-                for (int dy=-1; dy<2; dy++){
-                    if (estDansLaGrille(x+dx,y+dy)) {
-                        click(x+dx,y+dy);
+        if (estDansLaGrille(x, y) && !cases[x][y].isClicked && !cases[x][y].isMarked) {
+            cases[x][y].click();
+            if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
+                for (int dx = -1; dx < 2; dx++) {
+                    for (int dy = -1; dy < 2; dy++) {
+                        if (estDansLaGrille(x + dx, y + dy)) {
+                            click(x + dx, y + dy);
+                        }
                     }
                 }
             }
-        }*/
+        }
     }
-
+    public void drapo(int x, int y){
+        if (estDansLaGrille(x,y) && !cases[x][y].isClicked)
+        cases[x][y].reversedrapo();
+    }
 
     public int getNbCase() {
         return lignes*colonnes;
