@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialisation de la grille; faire varier gridSize et nbMines à l'avenir
         int gridSize = 10;
         int nbMines = 15;
-        grille = new Grille(gridSize,gridSize, nbMines);
+        grille = new Grille(gridSize, gridSize, nbMines);
 
         // La gridView en elle-même
         gridView = findViewById(R.id.gridView);
@@ -42,11 +42,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button btnFlag = findViewById(R.id.btnFlag);
-        btnFlag.setOnClickListener(v -> {});
+        btnFlag.setOnClickListener(v -> {
+        });
 
         Button btnDiscover = findViewById(R.id.btnDiscover);
-        btnDiscover.setOnClickListener(v -> {});
+        btnDiscover.setOnClickListener(v -> {
+        });
     }
+
     public void updateGrid() {
         mineAdapter.notifyDataSetChanged();
     }
