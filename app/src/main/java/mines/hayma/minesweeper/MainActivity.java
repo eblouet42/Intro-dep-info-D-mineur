@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
             int y = position / gridSize;
             grille.click(x, y);
             mineAdapter.setSelectedPosition(position);
+            updateGrid();
             // Actualiser la position pour l'adaptateur
         });
-
 
         Button btnFlag = findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {});
@@ -49,15 +49,4 @@ public class MainActivity extends AppCompatActivity {
     }
     public void updateGrid() {
         mineAdapter.notifyDataSetChanged();
-    }
-
-    public void gameOver() {
-        Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-        for (Case c : grille.cases) {
-            if (c.hasMine) {
-                c.isClicked = true;
-            }
-        }
-        updateGrid();
-    }
-}
+    }}

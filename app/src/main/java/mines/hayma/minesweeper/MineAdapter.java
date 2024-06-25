@@ -68,7 +68,7 @@ public class MineAdapter extends BaseAdapter {
                 {int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
                 imageView.setImageResource(resId);}}
                 // On set l'image du nombre qui correspond si on ne clique pas sur une bombe
-                // Il faut une méthode sur les items pour obtenir le nombre de mines voisines
+                // Il faut une méthode sur les cases pour obtenir le nombre de mines voisines
         else if (c.isMarked)
             {imageView.setImageResource(R.drawable.flag);}
             // On set une image de drapeau
