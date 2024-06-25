@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             int y = position / gridSize;
             grille.click(x, y);
             mineAdapter.setSelectedPosition(position);
-            updateGrid();
+            //updateGrid();
             // Actualiser la position pour l'adaptateur
         });
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void updateGrid() {
+    /*public void updateGrid() {
         mineAdapter.notifyDataSetChanged();
-    }
+    }*/
 }

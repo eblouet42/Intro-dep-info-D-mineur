@@ -60,7 +60,7 @@ public class MineAdapter extends BaseAdapter {
             //Si convertView n'est pas null, cela signifie qu'une vue réutilisable est disponible.
             //imageView = (ImageView) convertView; : la vue réutilisable (qui est supposée être un ImageView) est castée et assignée à la variable imageView.
 
-        Case c = grille.getCases().get(position);
+        Case c = (Case) getItem(position);
         // On récupère l'item associé à la position
 
         if (c.isClicked) {
@@ -71,6 +71,7 @@ public class MineAdapter extends BaseAdapter {
             else {
                 int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
                 imageView.setImageResource(resId);
+                System.out.println(c.getMinesVoisines());
             }
         }
                 // On set l'image du nombre qui correspond si on ne clique pas sur une bombe

@@ -27,21 +27,23 @@ public class Grille {
             }
         }
         placerMines();
-        calculervoisins();
+        calculerVoisins();
     }
 
     private Boolean estDansLaGrille(int x, int y){
         return x >= 0 && x < lignes && y >= 0 && y < colonnes;
     }
 
-    private void calculervoisins() {
+    private void calculerVoisins() {
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
                 int compteur = 0;
                 for (int di=-1; di<2; di++){
                     for (int dj=-1; dj<2; dj++){
                         if (estDansLaGrille(i+di,j+dj)) {
-                            compteur++;
+                            if (cases[i+di][j+dj].hasMine) {
+                                compteur++;
+                            }
                         }
                     }
                 }
@@ -65,7 +67,7 @@ public class Grille {
 
     public void click(int x, int y) {
         cases[x][y].click();
-        if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
+        /*if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
             for (int dx=-1; dx<2; dx++){
                 for (int dy=-1; dy<2; dy++){
                     if (estDansLaGrille(x+dx,y+dy)) {
@@ -73,7 +75,7 @@ public class Grille {
                     }
                 }
             }
-        }
+        }*/
     }
 
 
