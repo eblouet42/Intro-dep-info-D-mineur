@@ -1,70 +1,154 @@
 package mines.hayma.minesweeper;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+import android.os.SystemClock;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Grille grille;
-    private GridView gridView;
     private MineAdapter mineAdapter;
-    private Case selectedCase;
+    private boolean debut=false;
+    private boolean fingame=false;
+    private TextView minesrestantes;
+    private int nbdrapos = 0;
+
     ImageView caseSelect;
     int x;
     int y;
-    int colorSelected = Color.parseColor("#80FFFFFF");
-    int colorNormal = Color.TRANSPARENT;
+    int colorSelected=Color.parseColor("#80FFFFFF");
+    int colorNormal=Color.TRANSPARENT;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Initialisation de la grille; faire varier gridSize et nbMines à l'avenir
-        int gridSize = 15;
-        int nbMines = 40;
+        int gridSize=13;
+        int nbMines=20;
         grille = new Grille(gridSize, gridSize, nbMines);
 
+        // Le chrono il est là
+        Chronometer chrono=findViewById(R.id.Chronometer);
+        chrono.setOnChronometerTickListener(chronometer -> {
+            long elapsedMillis=SystemClock.elapsedRealtime()-chronometer.getBase();
+            chronometer.setText(elapsedMillis/1000+" s");
+        });
 
+        // Le compteur de mines restantes
+        minesrestantes=findViewById(R.id.Minesrestantes);
+        updateminesrestantes();
         // La gridView en elle-même
-        gridView = findViewById(R.id.gridView);
+        GridView gridView = findViewById(R.id.gridView);
         gridView.setNumColumns(gridSize);
+
         // L'adapteur qui actualise tous les objets de la gridView
         mineAdapter = new MineAdapter(this, grille);
         gridView.setAdapter(mineAdapter);
 
         // Lorsque l'utilisateur clique sur un élément qui est repéré par sa view, sa position, son id...
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Récupérer l'objet de la case cliquée
-                if (caseSelect!=null) {
-                    caseSelect.setBackgroundColor(colorNormal);
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+
+            // Récupérer l'objet de la case cliquée
+            if (caseSelect!=null) {
+                caseSelect.setBackgroundColor(colorNormal);
+            }
+            caseSelect=(ImageView) view;
+            caseSelect.setBackgroundColor(colorSelected);
+            x = position%grille.getLignes();
+            y = position/grille.getColonnes();
+        });
+
+        Button btnFlag=findViewById(R.id.btnFlag);
+        btnFlag.setOnClickListener(v -> {
+            if (!fingame) {
+                grille.getCases()[x][y].mark();
+                if (grille.getCases()[x][y].isMarked){
+                    nbdrapos++;
+                }else{
+                    nbdrapos--;
                 }
-                caseSelect = (ImageView) view;
-                caseSelect.setBackgroundColor(colorSelected);
-                x = position%grille.getLignes();
-                y = position/grille.getColonnes();
+                updateminesrestantes();
+                mineAdapter.notifyDataSetChanged();
             }
         });
 
-        Button btnFlag = findViewById(R.id.btnFlag);
-        btnFlag.setOnClickListener(v -> {
-            grille.getCases()[x][y].mark();
-            mineAdapter.notifyDataSetChanged();
-        });
-
-        Button btnDiscover = findViewById(R.id.btnDiscover);
+        Button btnDiscover=findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
-            grille.click(x,y);
-            mineAdapter.notifyDataSetChanged();
+            if (!fingame){
+
+                // On lance le chrono à la première case découverte
+                if (!debut) {
+                    chrono.setBase(SystemClock.elapsedRealtime());
+                    chrono.start();
+                    debut=true;
+                }
+                grille.click(x, y);
+
+                // Après chaque découverte, on vérifie si le jeu est terminé ou non
+                if (ezwin()) {
+                    Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
+                    chrono.stop();
+                    revealbombs();
+                    fingame=true;
+                } else if (isnoob()) {
+                    Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
+                    chrono.stop();
+                    revealbombs();
+                    fingame=true;
+                }
+                mineAdapter.notifyDataSetChanged();
+            }
         });
     }
+    private void updateminesrestantes(){
+        int nbminesrestantes = Grille.nbMines - nbdrapos;
+        minesrestantes.setText(String.valueOf(nbminesrestantes));
+    }
+    // Le jeu est gagné lorsque toutes les cases sans mines sont découvertes
+    private boolean ezwin() {
+        for (int i=0;i<grille.getLignes();i++) {
+            for (int j=0;j<grille.getColonnes();j++) {
+                Case c=grille.getCases()[i][j];
+                if (!c.isClicked && !c.hasMine) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-
+    // Le jeu est perdu quand une case est découverte et a une mine
+    private boolean isnoob() {
+        for (int i=0;i<grille.getLignes();i++) {
+            for (int j=0;j<grille.getColonnes();j++) {
+                Case c=grille.getCases()[i][j];
+                if (c.isClicked && c.hasMine) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    // On découvre toutes les bombes en fin de partie
+    private void revealbombs(){
+        for (int i=0;i<grille.getLignes();i++){
+            for (int j=0;j<grille.getColonnes();j++){
+                Case c=grille.getCases()[i][j];
+                if (c.hasMine){
+                    c.click();
+                }
+            }
+        }
+    }
 }

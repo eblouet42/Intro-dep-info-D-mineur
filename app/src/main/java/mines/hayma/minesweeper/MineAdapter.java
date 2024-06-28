@@ -1,5 +1,6 @@
 package mines.hayma.minesweeper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
@@ -11,9 +12,9 @@ import android.widget.ImageView;
 public class MineAdapter extends BaseAdapter {
 
     // Trucs de la doc
-    private Context context;
-    private Grille grille;
-    private int selectedPosition = -1;
+    private final Context context;
+    private final Grille grille;
+
     public MineAdapter(Context context, Grille grille)
         {this.context = context;
         this.grille = grille;}
@@ -33,6 +34,7 @@ public class MineAdapter extends BaseAdapter {
         {return position;}
     // jsp à quoi ça sert, à rien pr l'instant mais la doc le définit quand même
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     //Explanation
     //int position : la position de l'élément dans la liste ou la grille.
@@ -44,15 +46,15 @@ public class MineAdapter extends BaseAdapter {
 
         if (convertView == null)
             {imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);}
+                int size = parent.getWidth() / grille.getColonnes()-8;
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
 
             //Si convertView est null, cela signifie qu'il n'y a pas de vue réutilisable disponible, donc une nouvelle vue doit être créée.
             //imageView = new ImageView(context); : crée une nouvelle instance de ImageView en utilisant le contexte de l'application ou de l'activité.
             //imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85)); : définit les paramètres de mise en page pour l'image, ici une taille fixe de 85x85 pixels.
             //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); : définit le type de mise à l'échelle de l'image. CENTER_CROP ajuste l'image pour qu'elle remplisse l'espace de l'ImageView, tout en conservant le ratio d'aspect de l'image.
-            //imageView.setPadding(8, 8, 8, 8); : définit une marge intérieure (padding) de 8 pixels sur tous les côtés de l'image.
 
         else
             {imageView = (ImageView) convertView;}
@@ -66,6 +68,7 @@ public class MineAdapter extends BaseAdapter {
         imageView.setBackground(stateListDrawable);
 
         imageView.setImageResource(R.drawable.untouched);
+        int selectedPosition = -1;
         if (position == selectedPosition){
             imageView.setBackgroundColor(colorSelected);
         }
@@ -85,7 +88,7 @@ public class MineAdapter extends BaseAdapter {
             }
                 // On set une image de bombe si on clique sur une bombe
             else {
-                int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
+                @SuppressLint("DiscouragedApi") int resId = context.getResources().getIdentifier("number" + c.getMinesVoisines(), "drawable", context.getPackageName());
                 imageView.setImageResource(resId);
             }
         }

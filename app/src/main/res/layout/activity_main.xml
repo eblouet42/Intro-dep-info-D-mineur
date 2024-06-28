@@ -1,8 +1,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <Chronometer
+        android:id="@+id/Chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:background="@drawable/chrono_bg" />
+
+    <TextView
+        android:id="@+id/Minesrestantes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/Chronometer"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:drawablePadding="8dp"
+        app:drawableStartCompat="@drawable/bomb" />
 
     <GridView
         android:id="@+id/gridView"
@@ -11,13 +35,14 @@
         android:addStatesFromChildren="true"
         android:background="#888"
         android:gravity="center"
-        android:horizontalSpacing="1dp"
+        android:horizontalSpacing="4dp"
         android:numColumns="4"
         android:padding="4dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="1dp" />
-
+        android:verticalSpacing="4dp"
+        android:layout_below="@id/Chronometer" />
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -26,14 +51,17 @@
 
         <Button
             android:id="@+id/btnFlag"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Flag" />
+            android:text="@string/flag" />
 
         <Button
             android:id="@+id/btnDiscover"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Discover" />
+            android:text="@string/discover" />
+
     </LinearLayout>
 </RelativeLayout>
