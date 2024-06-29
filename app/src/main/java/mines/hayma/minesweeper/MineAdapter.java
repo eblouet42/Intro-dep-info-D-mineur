@@ -24,8 +24,8 @@ public class MineAdapter extends BaseAdapter {
     //Définir une méthode sur les grilles pour avoir le nb de cases
     @Override
     public Object getItem(int position){
-        int x = position % grille.getLignes();
-        int y = position / grille.getLignes();
+        int x = position/grille.getColonnes();
+        int y = position%grille.getColonnes();
         return grille.getCases()[x][y];
     }
     //Définir une méthode sur les cases pour obtenir l'item du gridview à partir de la position x,y

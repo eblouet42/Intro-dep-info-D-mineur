@@ -3,9 +3,9 @@ package mines.hayma.minesweeper;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -20,14 +20,17 @@ public class MainActivity extends AppCompatActivity {
     private MineAdapter mineAdapter;
     private boolean debut=false;
     private boolean fingame=false;
+    private boolean victoire=false;
     private TextView minesrestantes;
     private int nbdrapos = 0;
-
+    private MediaPlayer mediaPlayer;
+    private int lamusic;
     ImageView caseSelect;
     int x;
     int y;
     int colorSelected=Color.parseColor("#80FFFFFF");
     int colorNormal=Color.TRANSPARENT;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         int hauteur = appelant.getIntExtra("hauteur",0);
         int longueur = appelant.getIntExtra("longueur",0);
         int nbMines = appelant.getIntExtra("mines",0);
+        int difficulte= appelant.getIntExtra("difficulté",0);
+        gamemusic(difficulte);
 
         // Initialisation de la grille;
         grille = new Grille(hauteur, longueur, nbMines);
@@ -69,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
             }
             caseSelect=(ImageView) view;
             caseSelect.setBackgroundColor(colorSelected);
-            x = position%grille.getColonnes();
-            y = position/grille.getLignes();
+            x = position/grille.getColonnes();
+            y = position%grille.getColonnes();
         });
 
         ImageButton btnFlag=findViewById(R.id.btnFlag);
@@ -95,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!debut) {
                     chrono.setBase(SystemClock.elapsedRealtime());
                     chrono.start();
+                    startMusic();
                     debut=true;
                 }
                 grille.click(x, y);
@@ -103,12 +109,22 @@ public class MainActivity extends AppCompatActivity {
                 if (ezwin()) {
                     Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
                     chrono.stop();
+                    stopMusic();
                     revealbombs();
+                    lamusic=R.raw.victory;
+                    mediaPlayer = MediaPlayer.create(this, lamusic);
+                    mediaPlayer.setLooping(false);
+                    mediaPlayer.start();
                     fingame=true;
                 } else if (isnoob()) {
                     Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
                     chrono.stop();
+                    stopMusic();
                     revealbombs();
+                    lamusic=R.raw.defeat;
+                    mediaPlayer = MediaPlayer.create(this, lamusic);
+                    mediaPlayer.setLooping(false);
+                    mediaPlayer.start();
                     fingame=true;
                 }
                 mineAdapter.notifyDataSetChanged();
@@ -118,6 +134,28 @@ public class MainActivity extends AppCompatActivity {
     private void updateminesrestantes(){
         int nbminesrestantes = Grille.nbMines - nbdrapos;
         minesrestantes.setText(String.valueOf(nbminesrestantes));
+    }
+    private void gamemusic(int difficulty){
+        if (difficulty==1){
+            lamusic=R.raw.easy_ouioui;
+        } else if(difficulty==2){
+            lamusic=R.raw.intermediate_mii;
+        } else{
+            lamusic=R.raw.difficult_doom;
+        }
+    }
+    private void startMusic() {
+        mediaPlayer = MediaPlayer.create(this, lamusic);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+    }
+    private void stopMusic() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        stopMusic();
     }
     // Le jeu est gagné lorsque toutes les cases sans mines sont découvertes
     private boolean ezwin() {

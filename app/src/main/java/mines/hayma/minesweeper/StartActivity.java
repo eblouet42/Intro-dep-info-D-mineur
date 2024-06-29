@@ -26,10 +26,10 @@ public class StartActivity extends AppCompatActivity {
 
     public void startFacile(View view) {
         Intent pageJeu = new Intent(StartActivity.this, MainActivity.class);
-        pageJeu.putExtra("hauteur", 8);
-        pageJeu.putExtra("longueur", 10);
+        pageJeu.putExtra("hauteur", 10);
+        pageJeu.putExtra("longueur", 8);
         pageJeu.putExtra("mines", 10);
-
+        pageJeu.putExtra("difficulté", 1);
         startActivity(pageJeu);
         finish();
     }
@@ -39,7 +39,7 @@ public class StartActivity extends AppCompatActivity {
         pageJeu.putExtra("hauteur", 18);
         pageJeu.putExtra("longueur", 14);
         pageJeu.putExtra("mines", 40);
-
+        pageJeu.putExtra("difficulté", 2);
         startActivity(pageJeu);
         finish();
     }
@@ -48,8 +48,8 @@ public class StartActivity extends AppCompatActivity {
         pageJeu.putExtra("hauteur", 24);
         pageJeu.putExtra("longueur", 20);
         pageJeu.putExtra("mines", 99);
-
+        pageJeu.putExtra("difficulté", 3);
         startActivity(pageJeu);
-        //finish();
+        finish();
     }
 }
