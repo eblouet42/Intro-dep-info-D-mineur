@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity {
     private Grille grille;
@@ -27,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView caseSelect;
     int x;
     int y;
-    int colorSelected=Color.parseColor("#80FFFFFF");
+    int colorSelected=Color.parseColor("#000000");
     int colorNormal=Color.TRANSPARENT;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -105,9 +107,10 @@ public class MainActivity extends AppCompatActivity {
         btnDiscover.setOnClickListener(v -> {
             if (!fingame){
                 grille.click(x, y);
+                caseSelect.setBackgroundColor(colorNormal);
                 // Après chaque découverte, on vérifie si le jeu est terminé ou non
                 if (ezwin()) {
-                    Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
                     chrono.stop();
                     stopMusic();
                     revealbombs();
@@ -116,8 +119,22 @@ public class MainActivity extends AppCompatActivity {
                     mediaPlayer.setLooping(false);
                     mediaPlayer.start();
                     fingame=true;
+                    String dif;
+                    if (difficulte==1){
+                        dif = "facile";
+                    }
+                    else if (difficulte==2){
+                        dif = "moyen";
+                    }
+                    else {
+                        dif = "difficile";
+                    }
+                    showDialogVictoire((SystemClock.elapsedRealtime()-chrono.getBase())/1000 + "", dif);
+
+
+
                 } else if (isnoob()) {
-                    Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
                     chrono.stop();
                     stopMusic();
                     revealbombs();
@@ -126,11 +143,18 @@ public class MainActivity extends AppCompatActivity {
                     mediaPlayer.setLooping(false);
                     mediaPlayer.start();
                     fingame=true;
+
+
+                    showDialogDefaite();
+
                 }
                 mineAdapter.notifyDataSetChanged();
             }
         });
     }
+
+
+
     private void updateminesrestantes(){
         int nbminesrestantes = Grille.nbMines - nbdrapos;
         minesrestantes.setText(String.valueOf(nbminesrestantes));
@@ -192,5 +216,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void showDialogDefaite() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        dialogDefaite dialogFragment = new dialogDefaite();
+        dialogFragment.show(fragmentManager, "MyDialogFragment");
+    }
+    private void showDialogVictoire(String chrono, String dif) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        dialogVictoire dialogFragment = dialogVictoire.newInstance(chrono,dif);
+        dialogFragment.show(fragmentManager, "MyDialogFragment");
     }
 }

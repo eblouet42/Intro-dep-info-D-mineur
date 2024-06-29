@@ -49,6 +49,7 @@ public class MineAdapter extends BaseAdapter {
                 int size = parent.getWidth() / grille.getColonnes()-8;
                 imageView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(4,4,4,4);
             }
 
             //Si convertView est null, cela signifie qu'il n'y a pas de vue réutilisable disponible, donc une nouvelle vue doit être créée.
@@ -58,7 +59,7 @@ public class MineAdapter extends BaseAdapter {
 
         else
             {imageView = (ImageView) convertView;}
-
+/*
         int colorSelected = Color.parseColor("#80FFFFFF");
         int colorNormal = Color.TRANSPARENT;
         // Deux couleurs: blanc(pour la selectionnée) et transparant
@@ -67,7 +68,7 @@ public class MineAdapter extends BaseAdapter {
         stateListDrawable.addState(new int[] {}, context.getDrawable(R.drawable.cell_background));
         imageView.setBackground(stateListDrawable);
 
-        imageView.setImageResource(R.drawable.untouched);
+
         int selectedPosition = -1;
         if (position == selectedPosition){
             imageView.setBackgroundColor(colorSelected);
@@ -76,9 +77,11 @@ public class MineAdapter extends BaseAdapter {
             imageView.setBackgroundColor(colorNormal);
         }
 
+ */
+
             //Si convertView n'est pas null, cela signifie qu'une vue réutilisable est disponible.
             //imageView = (ImageView) convertView; : la vue réutilisable (qui est supposée être un ImageView) est castée et assignée à la variable imageView.
-
+        imageView.setImageResource(R.drawable.untouched);
         Case c = (Case) getItem(position);
         // On récupère l'item associé à la position
 
