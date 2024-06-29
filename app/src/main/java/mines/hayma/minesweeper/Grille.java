@@ -6,6 +6,7 @@ public class Grille {
     private final int colonnes;
     public static int nbMines;
     private final Case[][] cases;
+    public int nbcasesdecouvertes = 0;
 
     private boolean generation=false;
 
@@ -65,13 +66,14 @@ public class Grille {
         }
     }
 
-    public void click(int x, int y) {
+    public String click(int x, int y) {
         if (!generation){
             initialisation(x,y);
         }
         else{
             if (!cases[x][y].isMarked && !cases[x][y].isClicked) {
                 cases[x][y].click();
+                nbcasesdecouvertes++;
                 if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
                     for (int dx = -1; dx < 2; dx++) {
                         for (int dy = -1; dy < 2; dy++) {
@@ -83,8 +85,12 @@ public class Grille {
                         }
                     }
                 }
+                if (cases[x][y].hasMine){
+                    return "boom";
+                }
             }
         }
+        return null;
     }
 
 
@@ -99,4 +105,6 @@ public class Grille {
     public int getColonnes(){
         return colonnes;
     }
+
+    public int getNbMines() {return nbMines;}
 }
