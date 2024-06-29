@@ -3,7 +3,6 @@ package mines.hayma.minesweeper;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.StateListDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -36,11 +35,6 @@ public class MineAdapter extends BaseAdapter {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
-    //Explanation
-    //int position : la position de l'élément dans la liste ou la grille.
-    //View convertView : la vue réutilisable pour l'élément. Elle est null si aucune vue n'est disponible pour la réutilisation.
-    //ViewGroup parent : le parent qui contiendra la vue retournée (la ListView ou GridView).
-
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         // Sans la disjonction proposé par la doc sur le covertview, ça marche...
@@ -48,23 +42,12 @@ public class MineAdapter extends BaseAdapter {
         int size = parent.getWidth() / grille.getColonnes()-8;
         imageView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setPadding(4,4,4,4);
 
-        int colorSelected = Color.parseColor("#80FFFFFF");
-        int colorNormal = Color.TRANSPARENT;
-
-        // Deux couleurs: blanc(pour la selectionnée) et transparant
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, context.getDrawable(R.drawable.cell_highlight));
-        stateListDrawable.addState(new int[] {}, context.getDrawable(R.drawable.cell_background));
-        imageView.setBackground(stateListDrawable);
-
+        int colorSelected = Color.parseColor("#000000");
         imageView.setImageResource(R.drawable.untouched);
-        int selectedPosition = -1;
-        if (position == selectedPosition){
+        if (position==-1){
             imageView.setBackgroundColor(colorSelected);
-        }
-        else{
-            imageView.setBackgroundColor(colorNormal);
         }
 
         Case c = (Case) getItem(position);
@@ -83,7 +66,6 @@ public class MineAdapter extends BaseAdapter {
         if (c.isMarked) {
             imageView.setImageResource(R.drawable.flag);
         }
-
         return imageView;
     }
 

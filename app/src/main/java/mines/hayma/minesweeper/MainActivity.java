@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView caseSelect;
     int x;
     int y;
-    int colorSelected=Color.parseColor("#80FFFFFF");
+    int colorSelected=Color.parseColor("#000000");
     int colorNormal=Color.TRANSPARENT;
 
     @SuppressLint("SetTextI18n")
@@ -67,14 +67,22 @@ public class MainActivity extends AppCompatActivity {
         // Lorsque l'utilisateur clique sur un élément qui est repéré par sa view, sa position, son id...
         gridView.setOnItemClickListener((parent, view, position, id) -> {
 
-            // Récupérer l'objet de la case cliquée
+
+            x = position/grille.getColonnes();
+            y = position%grille.getColonnes();
+
+
             if (caseSelect!=null) {
                 caseSelect.setBackgroundColor(colorNormal);
             }
+            // On ne peut sélectionner que des cases non découvertes
+            if (grille.getCases()[x][y].isClicked) {
+                return;
+            }
+
+            // Récupérer l'objet de la case cliquée
             caseSelect=(ImageView) view;
             caseSelect.setBackgroundColor(colorSelected);
-            x = position/grille.getColonnes();
-            y = position%grille.getColonnes();
 
             // On lance le chrono à la première case découverte
             if (!debut) {
@@ -89,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btnFlag=findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {
+            if (grille.getCases()[x][y].isClicked) {
+                return;
+            }
             if (!fingame) {
                 grille.getCases()[x][y].mark();
                 if (grille.getCases()[x][y].isMarked){
@@ -103,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btnDiscover=findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
+            if (grille.getCases()[x][y].isClicked) {
+                return;
+            }
             if (!fingame){
                 grille.click(x, y);
                 // Après chaque découverte, on vérifie si le jeu est terminé ou non
