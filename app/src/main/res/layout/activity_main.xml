@@ -41,27 +41,34 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="4dp"
         android:layout_below="@id/Chronometer" />
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal">
+        android:layout_height="263dp"
+        android:layout_alignParentBottom="true">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnFlag"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/flag" />
+            android:layout_width="111dp"
+            android:layout_height="112dp"
+            android:background="#00FFFFFF"
+            android:src="@mipmap/bouton_drapeau_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnDiscover"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnDiscover"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/discover" />
+            android:background="#00FFFFFF"
+            android:src="@mipmap/ic_launcher_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnFlag"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

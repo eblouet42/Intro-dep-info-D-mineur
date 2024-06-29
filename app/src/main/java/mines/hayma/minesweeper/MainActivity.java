@@ -1,12 +1,14 @@
 package mines.hayma.minesweeper;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,10 +35,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialisation de la grille; faire varier gridSize et nbMines à l'avenir
-        int gridSize=13;
-        int nbMines=20;
-        grille = new Grille(gridSize, gridSize, nbMines);
+        Intent appelant = getIntent();
+        int hauteur = appelant.getIntExtra("hauteur",0);
+        int longueur = appelant.getIntExtra("longueur",0);
+        int nbMines = appelant.getIntExtra("mines",0);
+
+        // Initialisation de la grille;
+        grille = new Grille(hauteur, longueur, nbMines);
 
         // Le chrono il est là
         Chronometer chrono=findViewById(R.id.Chronometer);
@@ -50,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
         updateminesrestantes();
         // La gridView en elle-même
         GridView gridView = findViewById(R.id.gridView);
-        gridView.setNumColumns(gridSize);
-
+        gridView.setNumColumns(longueur);
         // L'adapteur qui actualise tous les objets de la gridView
         mineAdapter = new MineAdapter(this, grille);
         gridView.setAdapter(mineAdapter);
@@ -65,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
             }
             caseSelect=(ImageView) view;
             caseSelect.setBackgroundColor(colorSelected);
-            x = position%grille.getLignes();
-            y = position/grille.getColonnes();
+            x = position%grille.getColonnes();
+            y = position/grille.getLignes();
         });
 
-        Button btnFlag=findViewById(R.id.btnFlag);
+        ImageButton btnFlag=findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {
             if (!fingame) {
                 grille.getCases()[x][y].mark();
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnDiscover=findViewById(R.id.btnDiscover);
+        ImageButton btnDiscover=findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
             if (!fingame){
 
