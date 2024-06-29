@@ -11,41 +11,57 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
         android:padding="8dp"
         android:textSize="20sp"
         android:background="@drawable/chrono_bg" />
 
-    <TextView
-        android:id="@+id/Minesrestantes"
+    <RelativeLayout
+        android:id="@+id/compteur_mines"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/Chronometer"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_vertical"
-        android:textSize="18sp"
-        android:drawablePadding="8dp"
-        app:drawableStartCompat="@drawable/bomb" />
+        android:layout_below="@id/Chronometer"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true">
+        <ImageView
+            android:id="@+id/imagebomb"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/machin"
+            android:src="@drawable/bomb" />
+        <TextView
+            android:id="@+id/Minesrestantes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/imagebomb"
+            android:layout_marginStart="8dp"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"/>
+    </RelativeLayout>
 
     <GridView
         android:id="@+id/gridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:addStatesFromChildren="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/compteur_mines"
+        android:layout_above="@id/buttonContainer"
+        android:layout_margin="4dp"
         android:background="#888"
         android:gravity="center"
         android:horizontalSpacing="4dp"
         android:numColumns="4"
         android:padding="4dp"
-        android:verticalSpacing="4dp"
-        android:layout_below="@id/Chronometer" />
+        android:verticalSpacing="4dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
-        android:layout_height="263dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-
         <ImageButton
             android:id="@+id/btnFlag"
             android:layout_width="111dp"
@@ -57,7 +73,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnDiscover"
             app:layout_constraintTop_toTopOf="parent" />
-
         <ImageButton
             android:id="@+id/btnDiscover"
             style="?android:attr/buttonBarButtonStyle"
@@ -70,6 +85,6 @@
             app:layout_constraintEnd_toStartOf="@+id/btnFlag"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </RelativeLayout>

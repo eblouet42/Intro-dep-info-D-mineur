@@ -69,6 +69,7 @@ public class Grille {
     public String click(int x, int y) {
         if (!generation){
             initialisation(x,y);
+            click(x,y);
         }
         else{
             if (!cases[x][y].isMarked && !cases[x][y].isClicked) {

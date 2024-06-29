@@ -12,7 +12,6 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     int y;
     int colorSelected=Color.parseColor("#000000");
     int colorNormal=Color.TRANSPARENT;
+    private ImageButton btnFlag;
+    private ImageButton btnDiscover;
 
 
     @SuppressLint("SetTextI18n")
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
         mineAdapter = new MineAdapter(this, grille);
         gridView.setAdapter(mineAdapter);
 
+        btnFlag = findViewById(R.id.btnFlag);
+        btnDiscover = findViewById(R.id.btnDiscover);
+
         // Lorsque l'utilisateur clique sur un élément qui est repéré par sa view, sa position, son id...
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             x = position/grille.getColonnes();
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             if (caseSelect!=null) {
                 caseSelect.setBackgroundColor(colorNormal);
             }
+            //revealSamuel();
             // On ne peut sélectionner que des cases non découvertes
             if (grille.getCases()[x][y].isClicked) {
                 return;
@@ -99,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton btnFlag=findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {
             // On ne peut mettre de drapeaux que sur des cases non découvertes
             if (grille.getCases()[x][y].isClicked) {
@@ -115,9 +119,9 @@ public class MainActivity extends AppCompatActivity {
                 updateminesrestantes();
                 mineAdapter.notifyDataSetChanged();
             }
+            //cacherSamuel();
         });
 
-        ImageButton btnDiscover=findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
             // On ne peut découvrir que des cases non découvertes
             if (grille.getCases()[x][y].isClicked) {
@@ -166,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mineAdapter.notifyDataSetChanged();
             }
+            //cacherSamuel();
         });
     }
 
@@ -187,6 +192,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    /*private void revealSamuel() {
+        btnDiscover.setVisibility(View.VISIBLE);
+        btnFlag.setVisibility(View.VISIBLE);
+    }
+    private void cacherSamuel() {
+        btnDiscover.setVisibility(View.GONE);
+        btnFlag.setVisibility(View.GONE);
+    }*/
+
     private void gamemusic(int difficulty){
         if (difficulty==1){
             lamusic=R.raw.easy_ouioui;
