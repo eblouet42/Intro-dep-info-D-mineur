@@ -2,4 +2,6 @@
     <string name="app_name">Minesweeper</string>
     <string name="flag">Flag</string>
     <string name="discover">Discover</string>
+    <string name="todo">TODO</string>
+    <string name="jspmoi">TODO</string>
 </resources>

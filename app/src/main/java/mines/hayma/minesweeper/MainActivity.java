@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private MineAdapter mineAdapter;
     private boolean debut=false;
     private boolean fingame=false;
-    private boolean victoire=false;
     private TextView minesrestantes;
     private int nbdrapos = 0;
     private MediaPlayer mediaPlayer;
@@ -76,6 +75,16 @@ public class MainActivity extends AppCompatActivity {
             caseSelect.setBackgroundColor(colorSelected);
             x = position/grille.getColonnes();
             y = position%grille.getColonnes();
+
+            // On lance le chrono à la première case découverte
+            if (!debut) {
+                chrono.setBase(SystemClock.elapsedRealtime());
+                chrono.start();
+                startMusic();
+                debut=true;
+                grille.click(x,y);
+                mineAdapter.notifyDataSetChanged();
+            }
         });
 
         ImageButton btnFlag=findViewById(R.id.btnFlag);
@@ -95,16 +104,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton btnDiscover=findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
             if (!fingame){
-
-                // On lance le chrono à la première case découverte
-                if (!debut) {
-                    chrono.setBase(SystemClock.elapsedRealtime());
-                    chrono.start();
-                    startMusic();
-                    debut=true;
-                }
                 grille.click(x, y);
-
                 // Après chaque découverte, on vérifie si le jeu est terminé ou non
                 if (ezwin()) {
                     Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();

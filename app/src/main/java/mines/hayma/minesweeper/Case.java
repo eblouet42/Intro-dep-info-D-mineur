@@ -19,7 +19,6 @@ public class Case {
 
     public void click() {
         isClicked = true;
-
     }
 
     public void setMinesVoisines(int n) {

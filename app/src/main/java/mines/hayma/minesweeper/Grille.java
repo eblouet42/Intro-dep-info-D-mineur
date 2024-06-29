@@ -7,6 +7,8 @@ public class Grille {
     public static int nbMines;
     private final Case[][] cases;
 
+    private boolean generation=false;
+
     public Case[][] getCases() {
         return cases;
     }
@@ -16,17 +18,16 @@ public class Grille {
         this.colonnes = colonnes;
         Grille.nbMines = nbMines;
         cases = new Case[lignes][colonnes];
-        initialisation();
-    }
-
-    private void initialisation() {
         for (int i=0; i<lignes; i++){
             for (int j=0; j<colonnes; j++){
                 cases[i][j] = new Case();
             }
         }
-        placerMines();
+    }
+    private void initialisation(int startligne,int startcolonne) {
+        placerMines(startligne,startcolonne);
         calculerVoisins();
+        generation=true;
     }
 
     private Boolean estDansLaGrille(int x, int y){
@@ -51,13 +52,13 @@ public class Grille {
         }
     }
 
-    private void placerMines() {
+    private void placerMines(int startligne, int startcolonne) {
         Random random = new Random();
         int minesPlacees = 0;
         while (minesPlacees<nbMines){
             int ligne = random.nextInt(lignes);
             int colonne = random.nextInt(colonnes);
-            if (!cases[ligne][colonne].hasMine) {
+            if (!cases[ligne][colonne].hasMine && !((ligne>=startligne-1) && (ligne <= startligne+1) && (colonne>=startcolonne-1) && (colonne <= startcolonne+1))) {
                 cases[ligne][colonne].setMine(true);
                 minesPlacees++;
             }
@@ -65,14 +66,19 @@ public class Grille {
     }
 
     public void click(int x, int y) {
-        if (!cases[x][y].isMarked && !cases[x][y].isClicked) {
-            cases[x][y].click();
-            if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
-                for (int dx = -1; dx < 2; dx++) {
-                    for (int dy = -1; dy < 2; dy++) {
-                        if (estDansLaGrille(x + dx, y + dy)) {
-                            if (!cases[x + dx][y + dy].isClicked) {
-                                click(x + dx, y + dy);
+        if (!generation){
+            initialisation(x,y);
+        }
+        else{
+            if (!cases[x][y].isMarked && !cases[x][y].isClicked) {
+                cases[x][y].click();
+                if (cases[x][y].minesVoisines == 0) {//clique les voisins si pas de mines autour
+                    for (int dx = -1; dx < 2; dx++) {
+                        for (int dy = -1; dy < 2; dy++) {
+                            if (estDansLaGrille(x + dx, y + dy)) {
+                                if (!cases[x + dx][y + dy].isClicked) {
+                                    click(x + dx, y + dy);
+                                }
                             }
                         }
                     }
