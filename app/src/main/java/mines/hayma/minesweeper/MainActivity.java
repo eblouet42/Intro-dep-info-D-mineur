@@ -2,6 +2,7 @@ package mines.hayma.minesweeper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -197,14 +198,18 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
     // On découvre toutes les bombes en fin de partie
-    private void revealbombs(){
-        for (int i=0;i<grille.getLignes();i++){
-            for (int j=0;j<grille.getColonnes();j++){
-                Case c=grille.getCases()[i][j];
-                if (c.hasMine){
+    private void revealbombs() {
+        for (int i = 0; i < grille.getLignes(); i++) {
+            for (int j = 0; j < grille.getColonnes(); j++) {
+                Case c = grille.getCases()[i][j];
+                if (c.hasMine) {
                     c.click();
                 }
             }
         }
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

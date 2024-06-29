@@ -5,29 +5,35 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C6C4C4"
     tools:context=".StartActivity">
 
     <Button
         android:id="@+id/buttonFacile"
-        android:layout_width="130dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#39DA0C"
         android:fontFamily="@font/bangers"
         android:onClick="startFacile"
-        android:text="Facile"
-        android:textSize="24sp"
+        android:text="Facile (8 x 10)"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonMoyen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/textDifficulty" />
 
     <Button
         android:id="@+id/buttonMoyen"
-        android:layout_width="130dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#1F61D5"
         android:fontFamily="@font/bangers"
         android:onClick="startMoyen"
-        android:text="Moyen"
-        android:textSize="20sp"
+        android:text="Moyen (14 x 18)"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonDifficile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,12 +41,14 @@
 
     <Button
         android:id="@+id/buttonDifficile"
-        android:layout_width="130dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#850404"
         android:fontFamily="@font/bangers"
         android:onClick="startDifficile"
-        android:text="Difficile"
-        android:textSize="24sp"
+        android:text="Difficile (20 x 24)"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,8 +60,22 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bangers"
         android:text="Selectionnez la difficultée :"
+        android:textColor="#000000"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonFacile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Minesweeper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bangers"
+        android:text="Minesweeper"
+        android:textColor="#000000"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/textDifficulty"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
