@@ -24,7 +24,7 @@ public class MineAdapter extends BaseAdapter {
     //Définir une méthode sur les grilles pour avoir le nb de cases
     @Override
     public Object getItem(int position){
-        int x = position % grille.getColonnes();
+        int x = position % grille.getLignes();
         int y = position / grille.getLignes();
         return grille.getCases()[x][y];
     }
