@@ -2,6 +2,7 @@ package mines.hayma.minesweeper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -13,8 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private Grille grille;
@@ -59,24 +63,30 @@ public class MainActivity extends AppCompatActivity {
         // Le compteur de mines restantes
         minesrestantes=findViewById(R.id.Minesrestantes);
         updateminesrestantes();
+
         // La gridView en elle-même
         GridView gridView = findViewById(R.id.gridView);
         gridView.setNumColumns(longueur);
+
         // L'adapteur qui actualise tous les objets de la gridView
         mineAdapter = new MineAdapter(this, grille);
         gridView.setAdapter(mineAdapter);
 
         // Lorsque l'utilisateur clique sur un élément qui est repéré par sa view, sa position, son id...
         gridView.setOnItemClickListener((parent, view, position, id) -> {
-
-            // Récupérer l'objet de la case cliquée
+            x = position/grille.getColonnes();
+            y = position%grille.getColonnes();
             if (caseSelect!=null) {
                 caseSelect.setBackgroundColor(colorNormal);
             }
+            // On ne peut sélectionner que des cases non découvertes
+            if (grille.getCases()[x][y].isClicked) {
+                return;
+            }
+
+            // Récupérer l'objet de la case cliquée
             caseSelect=(ImageView) view;
             caseSelect.setBackgroundColor(colorSelected);
-            x = position/grille.getColonnes();
-            y = position%grille.getColonnes();
 
             // On lance le chrono à la première case découverte
             if (!debut) {
@@ -91,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btnFlag=findViewById(R.id.btnFlag);
         btnFlag.setOnClickListener(v -> {
+            // On ne peut mettre de drapeaux que sur des cases non découvertes
+            if (grille.getCases()[x][y].isClicked) {
+                return;
+            }
             if (!fingame) {
                 grille.getCases()[x][y].mark();
                 if (grille.getCases()[x][y].isMarked){
@@ -105,20 +119,22 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btnDiscover=findViewById(R.id.btnDiscover);
         btnDiscover.setOnClickListener(v -> {
-            if (!fingame){
-                grille.click(x, y);
-                caseSelect.setBackgroundColor(colorNormal);
-                // Après chaque découverte, on vérifie si le jeu est terminé ou non
-                if (ezwin()) {
-                    //Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
+            // On ne peut découvrir que des cases non découvertes
+            if (grille.getCases()[x][y].isClicked) {
+                return;
+            }
+            if (!fingame) {
+                // Si on découvre une case avec une bombe derrière, défaite
+                if (Objects.equals(grille.click(x, y), "boom")) {
+                    Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
                     chrono.stop();
                     stopMusic();
                     revealbombs();
-                    lamusic=R.raw.victory;
+                    lamusic = R.raw.defeat;
                     mediaPlayer = MediaPlayer.create(this, lamusic);
                     mediaPlayer.setLooping(false);
                     mediaPlayer.start();
-                    fingame=true;
+                    fingame = true;
                     String dif;
                     if (difficulte==1){
                         dif = "facile";
@@ -133,16 +149,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                } else if (isnoob()) {
-                    //Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
+                }
+                // Si on a découvert toutes les cases découvrables, victoire
+                else if (grille.getNbCase() - grille.getNbMines() == grille.nbcasesdecouvertes) {
+                    //Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
                     chrono.stop();
                     stopMusic();
                     revealbombs();
-                    lamusic=R.raw.defeat;
+                    lamusic = R.raw.victory;
                     mediaPlayer = MediaPlayer.create(this, lamusic);
                     mediaPlayer.setLooping(false);
                     mediaPlayer.start();
-                    fingame=true;
+                    fingame = true;
 
 
                     showDialogDefaite();
@@ -158,6 +176,18 @@ public class MainActivity extends AppCompatActivity {
     private void updateminesrestantes(){
         int nbminesrestantes = Grille.nbMines - nbdrapos;
         minesrestantes.setText(String.valueOf(nbminesrestantes));
+    }
+
+    // On découvre toutes les bombes en fin de partie
+    private void revealbombs() {
+        for (int i = 0; i < grille.getLignes(); i++) {
+            for (int j = 0; j < grille.getColonnes(); j++) {
+                Case c = grille.getCases()[i][j];
+                if (c.hasMine) {
+                    c.click();
+                }
+            }
+        }
     }
     private void gamemusic(int difficulty){
         if (difficulty==1){
@@ -181,41 +211,9 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         stopMusic();
     }
-    // Le jeu est gagné lorsque toutes les cases sans mines sont découvertes
-    private boolean ezwin() {
-        for (int i=0;i<grille.getLignes();i++) {
-            for (int j=0;j<grille.getColonnes();j++) {
-                Case c=grille.getCases()[i][j];
-                if (!c.isClicked && !c.hasMine) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    // Le jeu est perdu quand une case est découverte et a une mine
-    private boolean isnoob() {
-        for (int i=0;i<grille.getLignes();i++) {
-            for (int j=0;j<grille.getColonnes();j++) {
-                Case c=grille.getCases()[i][j];
-                if (c.isClicked && c.hasMine) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    // On découvre toutes les bombes en fin de partie
-    private void revealbombs(){
-        for (int i=0;i<grille.getLignes();i++){
-            for (int j=0;j<grille.getColonnes();j++){
-                Case c=grille.getCases()[i][j];
-                if (c.hasMine){
-                    c.click();
-                }
-            }
-        }
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     private void showDialogDefaite() {

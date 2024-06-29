@@ -3,7 +3,6 @@ package mines.hayma.minesweeper;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.StateListDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -36,52 +35,21 @@ public class MineAdapter extends BaseAdapter {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
-    //Explanation
-    //int position : la position de l'élément dans la liste ou la grille.
-    //View convertView : la vue réutilisable pour l'élément. Elle est null si aucune vue n'est disponible pour la réutilisation.
-    //ViewGroup parent : le parent qui contiendra la vue retournée (la ListView ou GridView).
-
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
+        // Sans la disjonction proposé par la doc sur le covertview, ça marche...
+        imageView = new ImageView(context);
+        int size = parent.getWidth() / grille.getColonnes()-8;
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setPadding(4,4,4,4);
 
-        if (convertView == null)
-            {imageView = new ImageView(context);
-                int size = parent.getWidth() / grille.getColonnes()-8;
-                imageView.setLayoutParams(new ViewGroup.LayoutParams(size, size));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(4,4,4,4);
-            }
-
-            //Si convertView est null, cela signifie qu'il n'y a pas de vue réutilisable disponible, donc une nouvelle vue doit être créée.
-            //imageView = new ImageView(context); : crée une nouvelle instance de ImageView en utilisant le contexte de l'application ou de l'activité.
-            //imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85)); : définit les paramètres de mise en page pour l'image, ici une taille fixe de 85x85 pixels.
-            //imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); : définit le type de mise à l'échelle de l'image. CENTER_CROP ajuste l'image pour qu'elle remplisse l'espace de l'ImageView, tout en conservant le ratio d'aspect de l'image.
-
-        else
-            {imageView = (ImageView) convertView;}
-/*
-        int colorSelected = Color.parseColor("#80FFFFFF");
-        int colorNormal = Color.TRANSPARENT;
-        // Deux couleurs: blanc(pour la selectionnée) et transparant
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[] { android.R.attr.state_pressed }, context.getDrawable(R.drawable.cell_highlight));
-        stateListDrawable.addState(new int[] {}, context.getDrawable(R.drawable.cell_background));
-        imageView.setBackground(stateListDrawable);
-
-
-        int selectedPosition = -1;
-        if (position == selectedPosition){
+        int colorSelected = Color.parseColor("#000000");
+        imageView.setImageResource(R.drawable.untouched);
+        if (position==-1){
             imageView.setBackgroundColor(colorSelected);
         }
-        else{
-            imageView.setBackgroundColor(colorNormal);
-        }
 
- */
-
-            //Si convertView n'est pas null, cela signifie qu'une vue réutilisable est disponible.
-            //imageView = (ImageView) convertView; : la vue réutilisable (qui est supposée être un ImageView) est castée et assignée à la variable imageView.
-        imageView.setImageResource(R.drawable.untouched);
         Case c = (Case) getItem(position);
         // On récupère l'item associé à la position
 
@@ -98,7 +66,6 @@ public class MineAdapter extends BaseAdapter {
         if (c.isMarked) {
             imageView.setImageResource(R.drawable.flag);
         }
-
         return imageView;
     }
 
