@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             if (!fingame) {
                 // Si on découvre une case avec une bombe derrière, défaite
                 if (Objects.equals(grille.click(x, y), "boom")) {
-                    Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
                     chrono.stop();
                     stopMusic();
                     revealbombs();
@@ -135,19 +135,8 @@ public class MainActivity extends AppCompatActivity {
                     mediaPlayer.setLooping(false);
                     mediaPlayer.start();
                     fingame = true;
-                    String dif;
-                    if (difficulte==1){
-                        dif = "facile";
-                    }
-                    else if (difficulte==2){
-                        dif = "moyen";
-                    }
-                    else {
-                        dif = "difficile";
-                    }
-                    showDialogVictoire((SystemClock.elapsedRealtime()-chrono.getBase())/1000 + "", dif);
 
-
+                    showDialogDefaite();
 
                 }
                 // Si on a découvert toutes les cases découvrables, victoire
@@ -162,8 +151,17 @@ public class MainActivity extends AppCompatActivity {
                     mediaPlayer.start();
                     fingame = true;
 
-
-                    showDialogDefaite();
+                    String dif;
+                    if (difficulte==1){
+                        dif = "facile";
+                    }
+                    else if (difficulte==2){
+                        dif = "moyen";
+                    }
+                    else {
+                        dif = "difficile";
+                    }
+                    showDialogVictoire((SystemClock.elapsedRealtime()-chrono.getBase())/1000 + "", dif);
 
                 }
                 mineAdapter.notifyDataSetChanged();
