@@ -31,7 +31,7 @@ public class Grille {
         generation=true;
     }
 
-    private Boolean estDansLaGrille(int x, int y){
+    Boolean estDansLaGrille(int x, int y){
         return x >= 0 && x < lignes && y >= 0 && y < colonnes;
     }
 
