@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             x = position/grille.getColonnes();
             y = position%grille.getColonnes();
             long currentTime = System.currentTimeMillis();
+
             if (!fingame) {
                 if (caseSelect != null) {
                     caseSelect.setBackgroundColor(colorNormal);
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 // Si on clique deux fois en moins de 500ms, dévoile les cases autour s'il a autant de drapeaux autour que de mines adjacentes.
                 // Sinon, on ne peut juste pas sélectionner une case déjà découverte
 
-                if (!grille.getCases()[x][y].isClicked && (currentTime- lastClickTime < 1000)) {
-                    creuser(caseSelect);
+                if (!grille.getCases()[x][y].isClicked && (currentTime- lastClickTime < 1000) && caseSelect.equals(view)) {
+                    creuser(view);
                 }
 
                 if (grille.getCases()[x][y].isClicked) {
