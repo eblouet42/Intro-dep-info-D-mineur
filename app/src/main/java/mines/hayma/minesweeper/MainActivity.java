@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
     int colorNormal=Color.TRANSPARENT;
     private ImageButton btnFlag;
     private ImageButton btnDiscover;
+    int hauteur;
+    int longueur;
+    int nbMines;
+    int difficulte;
+    Chronometer chrono;
 
     private long lastClickTime = 0;
 
@@ -47,17 +52,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent appelant = getIntent();
-        int hauteur = appelant.getIntExtra("hauteur",0);
-        int longueur = appelant.getIntExtra("longueur",0);
-        int nbMines = appelant.getIntExtra("mines",0);
-        int difficulte= appelant.getIntExtra("difficulté",0);
+        hauteur = appelant.getIntExtra("hauteur",0);
+        longueur = appelant.getIntExtra("longueur",0);
+        nbMines = appelant.getIntExtra("mines",0);
+        difficulte= appelant.getIntExtra("difficulté",0);
         gamemusic(difficulte);
 
         // Initialisation de la grille;
         grille = new Grille(hauteur, longueur, nbMines);
 
         // Le chrono il est là
-        Chronometer chrono=findViewById(R.id.Chronometer);
+        chrono=findViewById(R.id.Chronometer);
         chrono.setOnChronometerTickListener(chronometer -> {
             long elapsedMillis=SystemClock.elapsedRealtime()-chronometer.getBase();
             chronometer.setText(elapsedMillis/1000+" s");
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             x = position/grille.getColonnes();
             y = position%grille.getColonnes();
+            long currentTime = System.currentTimeMillis();
             if (!fingame) {
                 if (caseSelect != null) {
                     caseSelect.setBackgroundColor(colorNormal);
@@ -91,8 +97,12 @@ public class MainActivity extends AppCompatActivity {
                 // Si on clique deux fois en moins de 500ms, dévoile les cases autour s'il a autant de drapeaux autour que de mines adjacentes.
                 // Sinon, on ne peut juste pas sélectionner une case déjà découverte
 
+                if (!grille.getCases()[x][y].isClicked && (currentTime- lastClickTime < 1000)) {
+                    creuser(caseSelect);
+                }
+
                 if (grille.getCases()[x][y].isClicked) {
-                    long currentTime = System.currentTimeMillis();
+
                     // On regarde si le joueur a le droit de découvrir toutes les cases autour
                     boolean perdu = false;
                     if (currentTime - lastClickTime < 500) {
@@ -157,14 +167,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                         showDialogVictoire((SystemClock.elapsedRealtime() - chrono.getBase()) / 1000 + "", dif);
                     }
-                    lastClickTime = currentTime;
-                    return;
                 }
+                lastClickTime = currentTime;
 
-
-                // Récupérer l'objet de la case cliquée
-                caseSelect = (ImageView) view;
-                caseSelect.setBackgroundColor(colorSelected);
+                // Récupérer l'objet de la case cliquée, si elle n'est pas déjà creusée
+                if (!grille.getCases()[x][y].isClicked) {
+                    caseSelect = (ImageView) view;
+                    caseSelect.setBackgroundColor(colorSelected);
+                }
 
             }
 
@@ -197,56 +207,57 @@ public class MainActivity extends AppCompatActivity {
             //cacherSamuel();
         });
 
-        btnDiscover.setOnClickListener(v -> {
-            // On ne peut découvrir que des cases non découvertes
-            if (grille.getCases()[x][y].isClicked) {
-                return;
-            }
-            if (!fingame) {
-                // Si on découvre une case avec une bombe derrière, défaite
-                if (Objects.equals(grille.click(x, y), "boom")) {
-                    //Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
-                    chrono.stop();
-                    stopMusic();
-                    revealbombs();
-                    lamusic = R.raw.defeat;
-                    mediaPlayer = MediaPlayer.create(this, lamusic);
-                    mediaPlayer.setLooping(false);
-                    mediaPlayer.start();
-                    fingame = true;
-                    showDialogDefaite();
-                }
-                // Si on a découvert toutes les cases découvrables, victoire
-                else if (grille.getNbCase() - grille.getNbMines() == grille.nbcasesdecouvertes) {
-                    //Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
-                    chrono.stop();
-                    stopMusic();
-                    revealbombs();
-                    lamusic = R.raw.victory;
-                    mediaPlayer = MediaPlayer.create(this, lamusic);
-                    mediaPlayer.setLooping(false);
-                    mediaPlayer.start();
-                    fingame = true;
-
-                    String dif;
-                    if (difficulte==1){
-                        dif = "facile";
-                    }
-                    else if (difficulte==2){
-                        dif = "moyen";
-                    }
-                    else {
-                        dif = "difficile";
-                    }
-                    showDialogVictoire((SystemClock.elapsedRealtime()-chrono.getBase())/1000 + "", dif);
-
-                }
-                mineAdapter.notifyDataSetChanged();
-            }
-            //cacherSamuel();
-        });
+        btnDiscover.setOnClickListener(this::creuser);
     }
 
+    private void creuser(View v){
+        // On ne peut découvrir que des cases non découvertes
+        if (grille.getCases()[x][y].isClicked) {
+            return;
+        }
+        if (!fingame) {
+            // Si on découvre une case avec une bombe derrière, défaite
+            if (Objects.equals(grille.click(x, y), "boom")) {
+                //Toast.makeText(this, "ah tu t'es trompé...", Toast.LENGTH_SHORT).show();
+                chrono.stop();
+                stopMusic();
+                revealbombs();
+                lamusic = R.raw.defeat;
+                mediaPlayer = MediaPlayer.create(this, lamusic);
+                mediaPlayer.setLooping(false);
+                mediaPlayer.start();
+                fingame = true;
+                showDialogDefaite();
+            }
+            // Si on a découvert toutes les cases découvrables, victoire
+            else if (grille.getNbCase() - grille.getNbMines() == grille.nbcasesdecouvertes) {
+                //Toast.makeText(this, "gg wp no re", Toast.LENGTH_SHORT).show();
+                chrono.stop();
+                stopMusic();
+                revealbombs();
+                lamusic = R.raw.victory;
+                mediaPlayer = MediaPlayer.create(this, lamusic);
+                mediaPlayer.setLooping(false);
+                mediaPlayer.start();
+                fingame = true;
+
+                String dif;
+                if (difficulte==1){
+                    dif = "facile";
+                }
+                else if (difficulte==2){
+                    dif = "moyen";
+                }
+                else {
+                    dif = "difficile";
+                }
+                showDialogVictoire((SystemClock.elapsedRealtime()-chrono.getBase())/1000 + "", dif);
+
+            }
+            mineAdapter.notifyDataSetChanged();
+        }
+        //cacherSamuel();
+    }
 
 
     private void updateminesrestantes(){
