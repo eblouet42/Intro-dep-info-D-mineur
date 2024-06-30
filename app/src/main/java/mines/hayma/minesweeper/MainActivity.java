@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.View;
 import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -309,6 +310,12 @@ public class MainActivity extends AppCompatActivity {
     private void showDialogVictoire(String chrono, String dif) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         dialogVictoire dialogFragment = dialogVictoire.newInstance(chrono,dif);
+        dialogFragment.show(fragmentManager, "MyDialogFragment");
+    }
+
+    public void infoOnClick(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        dialogInfo dialogFragment = new dialogInfo();
         dialogFragment.show(fragmentManager, "MyDialogFragment");
     }
 }

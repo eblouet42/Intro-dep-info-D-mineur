@@ -3,7 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#878787"
     tools:context=".MainActivity">
+
+    <ImageButton
+        android:id="@+id/imageButtonInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#00FFFFFF"
+        android:onClick="infoOnClick"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        app:srcCompat="@drawable/baseline_info_24" />
 
     <Chronometer
         android:id="@+id/Chronometer"
@@ -12,17 +27,18 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:background="@drawable/chrono_bg"
         android:padding="8dp"
-        android:textSize="20sp"
-        android:background="@drawable/chrono_bg" />
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/compteur_mines"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/Chronometer"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp">
+
         <ImageView
             android:id="@+id/imagebomb"
             android:layout_width="30dp"
@@ -31,24 +47,25 @@
             android:layout_centerVertical="true"
             android:contentDescription="@string/machin"
             android:src="@drawable/bomb" />
+
         <TextView
             android:id="@+id/Minesrestantes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imagebomb"
-            android:layout_marginStart="8dp"
             android:layout_centerVertical="true"
-            android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/imagebomb"
+            android:drawablePadding="8dp"
             android:gravity="center_vertical"
-            android:drawablePadding="8dp"/>
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <GridView
         android:id="@+id/gridView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/compteur_mines"
         android:layout_above="@id/buttonContainer"
+        android:layout_below="@id/compteur_mines"
         android:layout_margin="4dp"
         android:background="#888"
         android:gravity="center"
@@ -62,6 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
+
         <ImageButton
             android:id="@+id/btnFlag"
             android:layout_width="111dp"
@@ -73,6 +91,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnDiscover"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btnDiscover"
             style="?android:attr/buttonBarButtonStyle"
