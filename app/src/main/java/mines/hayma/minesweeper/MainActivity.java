@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     creuser(view);
                 }
 
-                if (grille.getCases()[x][y].isClicked) {
+                if (grille.getCases()[x][y].isClicked && caseSelect.equals(view)) {
 
                     // On regarde si le joueur a le droit de découvrir toutes les cases autour
                     boolean perdu = false;
